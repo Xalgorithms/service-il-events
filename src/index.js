@@ -1,5 +1,6 @@
 const express = require('express');
 const body_parser = require('body-parser');
+const cors = require('cors');
 
 const server = require('./server');
 
@@ -15,6 +16,7 @@ function install_routes(app) {
 
 function install_middleware(app) {
   app.use(body_parser.json());
+  app.use(cors());
   return app;
 }
 

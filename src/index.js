@@ -3,14 +3,33 @@ const body_parser = require('body-parser');
 const cors = require('cors');
 
 const server = require('./server');
+const subscribers = require('./subscribers');
+
+function error(res) {
+  return (err) => res.status(500).json(err);
+}
 
 function install_routes(app) {
   let router = express.Router();
+
   router.get('/status', (req, res) => {
     res.json({ status: 'live'});
   });
 
+  router.post('/subscriptions', (req, res) => {
+    subscribers.add(req.body.topics).then((id) => {
+      res.json({ id });
+    }, error(res));
+  });
+
+  router.delete('/subscriptions/:id', (req, res) => {
+    subscribers.remove(req.params.id).then(() => {
+      res.end();
+    }, error(res));
+  });
+
   app.use(router);
+  
   return app;
 }
 

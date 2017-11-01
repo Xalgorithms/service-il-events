@@ -8,10 +8,11 @@
         "express": "^4.16.2",
         "http": "0.0.0",
         "https": "^1.0.0",
-        "lodash": "^4.17.4"
+        "lodash": "^4.17.4",
+        "uuid": "^3.1.0"
     },
     "scripts": {
-        "start-production" : "node ./src/index.js",
-        "start-development" : "nodemon --debug --inspect=9232 ./src/index.js"
+        "start-production": "node ./src/index.js",
+        "start-development": "nodemon --debug --inspect=9232 ./src/index.js"
     }
 }

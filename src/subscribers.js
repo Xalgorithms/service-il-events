@@ -1,12 +1,21 @@
 const _ = require('lodash');
 const uuid = require('uuid');
 
-var subscribers = {
+const SocketsServer = require('./sockets_server');
+
+let subscribers = {
 };
+
+const server = new SocketsServer();
 
 function add(topics) {
   let id = uuid();
   subscribers = _.set(subscribers, id, { topics });
+  server.anticipate(id, (o) => {
+    console.log(`# socket is connected (id=${id}; o=${JSON.stringify(o)})`);
+    // TODO: remove this, it's just a test of server.send
+    server.send(id, { topic: 'service', effect: 'test', payload: { a: 1, b: 2} });
+  });
   return Promise.resolve(id);
 }
 

@@ -22,7 +22,7 @@ function add(topics) {
 function remove(id) {
   if (_.has(subscribers, id)) {
     subscribers = _.omit(subscribers, id);
-    return Promise.resolve();
+    return server.cancel(id);
   }
 
   return Promise.reject({ reason: 'unknown_subscriber', message: `Failed to locate subscriber (id=${id})`});

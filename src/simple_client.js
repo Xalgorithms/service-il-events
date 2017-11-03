@@ -22,5 +22,18 @@ cl.post('/subscriptions', { topics: [] }).then((res) => {
   } else {
     console.log('! failed...');
   }
+
+  process.on('SIGINT', () => {
+    console.log(`# interrupt, unsubscribing (id=${res.data.id})`);
+    cl.delete(`/subscriptions/${res.data.id}`).then(() => {
+      console.log('< deleted, exiting');
+      process.exit();
+    }, (err) => {
+      console.log(err);
+      process.exit();
+    });
+  });
 });
+
+
 

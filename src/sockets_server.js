@@ -80,8 +80,21 @@ function Server() {
       console.log(`! failed to find live socket (id=${id})`);
     }
   }
+
+  function cancel(id) {
+    console.log(`# closing socket (id=${id})`);
+    if (_.has(sockets.live, id)) {
+      let ws = _.get(sockets.live, id, null);
+
+      ws.close();
+
+      return Promise.resolve();
+    } else {
+      return Promise.reject({ reason: 'no_socket', message: `No socket found (id=${id})` } );
+    }
+  }
   
-  return { anticipate, send };
+  return { anticipate, cancel, send };
 }
 
 module.exports = Server;

@@ -18,7 +18,7 @@ function install_routes(app) {
 
   router.post('/subscriptions', (req, res) => {
     subscribers.add(req.body.topics).then((id) => {
-      res.json({ id });
+      res.json({ id, url: `/sockets/${id}` });
     }, error(res));
   });
 

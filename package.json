@@ -3,15 +3,18 @@
     "version": "0.0.1",
     "main": "src/index.js",
     "dependencies": {
+        "axios": "^0.17.0",
         "body-parser": "^1.18.2",
         "cors": "^2.8.4",
         "express": "^4.16.2",
         "http": "0.0.0",
         "https": "^1.0.0",
-        "lodash": "^4.17.4"
+        "lodash": "^4.17.4",
+        "uuid": "^3.1.0",
+        "ws": "^3.2.0"
     },
     "scripts": {
-        "start-production" : "node ./src/index.js",
-        "start-development" : "nodemon --debug --inspect=9232 ./src/index.js"
+        "start-production": "node ./src/index.js",
+        "start-development": "nodemon --debug --inspect=9232 ./src/index.js"
     }
 }

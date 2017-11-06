@@ -2,6 +2,7 @@ const _ = require('lodash');
 const uuid = require('uuid');
 
 const SocketsServer = require('./sockets_server');
+const Consumer = require('./consumer');
 
 let subscribers = {
 };
@@ -10,18 +11,28 @@ const server = new SocketsServer();
 
 function add(topics) {
   let id = uuid();
-  subscribers = _.set(subscribers, id, { topics });
   server.anticipate(id, (o) => {
     console.log(`# socket is connected (id=${id}; o=${JSON.stringify(o)})`);
-    // TODO: remove this, it's just a test of server.send
-    server.send(id, { topic: 'service', effect: 'test', payload: { a: 1, b: 2} });
+    let consumer = new Consumer(topics, (topic, m) => {
+      console.log(`> message (topic=${topic}; m=${m})`);
+      try {
+        let o = JSON.parse(m);
+        server.send(id, { topic: topic, effect: 'notified', payload: o });
+      } catch (err) {
+        console.log('failed to parse JSON');
+        console.log(err);
+      }
+    });
+    subscribers = _.set(subscribers, id, consumer);
   });
   return Promise.resolve(id);
 }
 
 function remove(id) {
   if (_.has(subscribers, id)) {
+    let consumer = _.get(subscribers, id);
     subscribers = _.omit(subscribers, id);
+    consumer.close();
     return server.cancel(id);
   }
 

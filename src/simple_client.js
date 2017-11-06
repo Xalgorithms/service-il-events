@@ -4,9 +4,10 @@ const WebSocket = require('ws');
 let cl = axios.create({
   baseURL: 'http://localhost:4200/'
 });
+let topics = process.argv.slice(2);
 
-console.log('> creating a subscription');
-cl.post('/subscriptions', { topics: [] }).then((res) => {
+console.log(`> creating a subscription (topics=${topics})`);
+cl.post('/subscriptions', { topics: topics }).then((res) => {
   if (200 == res.status) {
     console.log(`< got a subscription (id=${res.data.id}; url=${res.data.url})`);
     let ws_url = `ws://localhost:8888${res.data.url}`;

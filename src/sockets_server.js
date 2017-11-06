@@ -58,6 +58,7 @@ function Server() {
           fn(id, _.get(o, 'payload'), ws);
         } catch (e) {
           console.log(`! failed to parse message`);
+          console.log(e);
         }
       });
 

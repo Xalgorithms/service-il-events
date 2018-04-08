@@ -16,8 +16,7 @@ function add(topics) {
     let consumer = new Consumer(topics, (topic, m) => {
       console.log(`> message (topic=${topic}; m=${m})`);
       try {
-        let o = JSON.parse(m);
-        server.send(id, { topic: topic, effect: 'notified', payload: o });
+        server.send(id, { topic: topic, effect: 'notified', payload: m });
       } catch (err) {
         console.log('failed to parse JSON');
         console.log(err);

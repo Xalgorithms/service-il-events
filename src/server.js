@@ -35,7 +35,7 @@ function listen(app, ssl_opts=null) {
     console.log(`! ${err}`);
   });
   server.on('listening', () => {
-    console.log('# listening');
+    console.log(`# listening (port=${port})`);
   });
 }
 

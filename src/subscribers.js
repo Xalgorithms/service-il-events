@@ -27,6 +27,10 @@ const uuid = require('uuid');
 const SocketsServer = require('./sockets_server');
 const Consumer = require('./consumer');
 
+const valid_topics = {
+  audit : 'il.emit.audit'
+};
+
 let subscribers = {
 };
 
@@ -36,10 +40,16 @@ function add(topics) {
   let id = uuid();
   server.anticipate(id, (o) => {
     console.log(`# socket is connected (id=${id}; o=${JSON.stringify(o)})`);
-    let consumer = new Consumer(topics, (topic, m) => {
-      console.log(`> message (topic=${topic}; m=${m})`);
+    console.log(topics);
+    let kafka_topics = _.reduce(topics, (kts, topic) => {
+      return _.has(valid_topics, topic) ? _.concat(kts, _.get(valid_topics, topic)) : kts;
+    }, []);
+    console.log(`# subscribing to kafka topics (topics=${_.join(kafka_topics, ', ')})`);
+    let consumer = new Consumer(kafka_topics, (kt, m) => {
+      let topic = _.get(_.invert(valid_topics), kt);
+      console.log(`> message (kafka_topic=${kt}; topic=${topic}; m=${m})`);
       try {
-        server.send(id, { topic: topic, effect: 'notified', payload: m });
+        server.send(id, { topic: topic, effect: 'notified', payload: JSON.parse(m) });
       } catch (err) {
         console.log('failed to parse JSON');
         console.log(err);

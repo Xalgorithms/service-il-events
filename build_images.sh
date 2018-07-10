@@ -28,7 +28,7 @@ fi
 
 VERSION=`cat .version`
 
-docker build -t "xalgorithms/xadf-events-service:latest-$ENVIRONMENT" -t "xalgorithms/xadf-events-service:$VERSION-$ENVIRONMENT" -f "Dockerfile.$ENVIRONMENT" .
+docker build -t "xalgorithms/service-il-events:latest-$ENVIRONMENT" -t "xalgorithms/service-il-events:$VERSION-$ENVIRONMENT" -f "Dockerfile.$ENVIRONMENT" .
 docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-docker push "xalgorithms/xadf-events-service:latest-$ENVIRONMENT"
-docker push "xalgorithms/xadf-events-service:$VERSION-$ENVIRONMENT"
+docker push "xalgorithms/service-il-events:latest-$ENVIRONMENT"
+docker push "xalgorithms/service-il-events:$VERSION-$ENVIRONMENT"

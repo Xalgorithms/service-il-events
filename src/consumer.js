@@ -23,28 +23,22 @@
 // <http://www.gnu.org/licenses/>.
 const _ = require('lodash');
 const kafka = require('kafka-node');
-const Client = kafka.Client;
 const HighLevelConsumer = kafka.HighLevelConsumer;
 
-const zookeeper_url = _.get(process.env, 'ZOOKEEPER_URL', 'localhost');
-
-console.log(`> connecting to kafka via zookeeper (zookeeper_url=${zookeeper_url})`);
-const cl = new Client(zookeeper_url);
-console.log('< connected');
+const url = _.get(process.env, 'KAFKA_BROKER', 'localhost:9092');
 
 const opts = {
   autoCommit: true,
   fetchMaxWaitMs: 1000  
 };
 
-function Consumer(topics, fn) {
-  console.log(`# creating high-level consumer (topics=${topics})`);
+function Consumer(id, topics, fn) {
+  console.log(`# creating consumer group (subscriber_id=${id}; url=${url}; topics=${topics})`);
   
-  let consumer = new HighLevelConsumer(cl, _.map(topics, (n) => {
-    return { topic: n };
-  }), opts);
+  let consumer = new kafka.ConsumerGroup({ kafkaHost: url, groupId: `service-events-subscriber-${id}` }, topics);
 
   consumer.on('message', (m) => {
+    console.log(`> message received (subscriber_id=${id}; topic=${m.topic}; value=${m.value})`);
     fn(m.topic, m.value);
   });
   
@@ -53,7 +47,9 @@ function Consumer(topics, fn) {
   });
 
   function close() {
-    consumer.close();
+    consumer.close(() => {
+      console.log(`# closed consumer for subscriber (id=${id})`);
+    });
   }
   
   return { close };

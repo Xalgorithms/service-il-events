@@ -40,12 +40,11 @@ function add(topics) {
   let id = uuid();
   server.anticipate(id, (o) => {
     console.log(`# socket is connected (id=${id}; o=${JSON.stringify(o)})`);
-    console.log(topics);
     let kafka_topics = _.reduce(topics, (kts, topic) => {
       return _.has(valid_topics, topic) ? _.concat(kts, _.get(valid_topics, topic)) : kts;
     }, []);
     console.log(`# subscribing to kafka topics (topics=${_.join(kafka_topics, ', ')})`);
-    let consumer = new Consumer(kafka_topics, (kt, m) => {
+    let consumer = new Consumer(id, kafka_topics, (kt, m) => {
       let topic = _.get(_.invert(valid_topics), kt);
       console.log(`> message (kafka_topic=${kt}; topic=${topic}; m=${m})`);
       try {
@@ -64,7 +63,9 @@ function remove(id) {
   if (_.has(subscribers, id)) {
     let consumer = _.get(subscribers, id);
     subscribers = _.omit(subscribers, id);
-    consumer.close();
+    if (consumer) {
+      consumer.close();
+    }
     return server.cancel(id);
   }
 

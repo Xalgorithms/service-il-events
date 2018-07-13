@@ -34,7 +34,16 @@ const valid_topics = {
 let subscribers = {
 };
 
-const server = new SocketsServer();
+const server = new SocketsServer({
+  closed: (id) => {
+    console.log(`# trying to remove subscriber (id=${id})`);
+    remove(id).then(() => {
+      console.log(`# removed subscriber (id=${id})`);
+    }, (err) => {
+      console.log(`? problem removing subscriber (id=${id}; reason=${err.reason})`);
+    });
+  }
+});
 
 function add(topics) {
   let id = uuid();
@@ -62,8 +71,10 @@ function add(topics) {
 function remove(id) {
   if (_.has(subscribers, id)) {
     let consumer = _.get(subscribers, id);
+    console.log(`# trying to remove consumer (id=${id})`);
     subscribers = _.omit(subscribers, id);
     if (consumer) {
+      console.log(`# consumer existed, closing (id=${id})`);
       consumer.close();
     }
     return server.cancel(id);

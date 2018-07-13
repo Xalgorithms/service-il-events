@@ -32,6 +32,7 @@ function default_message(payload) {
 function extract_id(url, fn) {
   let id = _.last(_.split(url, '/'));
   if (id) {
+    console.log(`# extracted id from url (url=${url}, id=${id})`);
     fn(id);
   } else {
     console.log(`! failed to extract an id (url=${url})`);
@@ -42,7 +43,7 @@ function send_on_ws(ws, o) {
   ws.send(JSON.stringify(o));
 }
 
-function Server() {
+function Server(events) {
   let wss = new WebSocket.Server({ port: 8888 });
   let sockets = {
     anticipated: {},
@@ -88,6 +89,7 @@ function Server() {
       ws.on('close', () => {
         console.log(`# closed, removing socket (id=${id})`);
         sockets.live = _.omit(sockets.live, id);
+        _.get(events, 'closed', () => {})(id);
       });
     });
   });
@@ -110,6 +112,7 @@ function Server() {
     if (_.has(sockets.live, id)) {
       let ws = _.get(sockets.live, id, null);
 
+      console.log(ws);
       ws.close();
 
       return Promise.resolve();

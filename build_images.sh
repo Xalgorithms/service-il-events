@@ -28,7 +28,12 @@ fi
 
 VERSION=`cat .version`
 
+echo "> $ENVIRONMENT/$VERSION"
+
+if [ -n "$DOCKER_USERNAME" ]; then
+  echo "> logging into dockerhub as $DOCKERUSERNAME"
+  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+fi
 docker build -t "xalgorithms/service-il-events:latest-$ENVIRONMENT" -t "xalgorithms/service-il-events:$VERSION-$ENVIRONMENT" -f "Dockerfile.$ENVIRONMENT" .
-docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
 docker push "xalgorithms/service-il-events:latest-$ENVIRONMENT"
 docker push "xalgorithms/service-il-events:$VERSION-$ENVIRONMENT"

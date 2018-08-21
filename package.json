@@ -1,6 +1,6 @@
 {
     "name": "service-il-events",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "main": "src/index.js",
     "dependencies": {
         "axios": "^0.17.0",

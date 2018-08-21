@@ -1,6 +1,6 @@
 {
-    "name": "xadf-events-service",
-    "version": "0.0.1",
+    "name": "service-il-events",
+    "version": "0.0.7",
     "main": "src/index.js",
     "dependencies": {
         "axios": "^0.17.0",

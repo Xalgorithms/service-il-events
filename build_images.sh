@@ -26,7 +26,7 @@ if [[ -n "$TRAVIS_BRANCH" && "$TRAVIS_BRANCH" == "production" ]]; then
    ENVIRONMENT=$TRAVIS_BRANCH
 fi
 
-VERSION=`cat .version`
+VERSION=`node -pe "require('./package.json').version"`
 
 echo "> $ENVIRONMENT/$VERSION"
 

@@ -26,11 +26,6 @@ const kafka = require('kafka-node');
 
 const url = _.get(process.env, 'KAFKA_BROKER', 'localhost:9092');
 
-const opts = {
-  autoCommit: true,
-  fetchMaxWaitMs: 1000  
-};
-
 function Consumer(id, topics, fn) {
   console.log(`# creating consumer group (subscriber_id=${id}; url=${url}; topics=${topics})`);
   

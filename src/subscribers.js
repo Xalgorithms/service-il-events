@@ -47,6 +47,7 @@ const server = new SocketsServer({
 
 function add(topics) {
   let id = uuid();
+  console.log(`# anticipating subscriber (topics=${topics}; id=${id})`);
   server.anticipate(id, (o) => {
     console.log(`# socket is connected (id=${id}; o=${JSON.stringify(o)})`);
     let kafka_topics = _.reduce(topics, (kts, topic) => {

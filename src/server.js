@@ -21,11 +21,12 @@
 // You should have received a copy of the GNU Affero General Public
 // License along with this program. If not, see
 // <http://www.gnu.org/licenses/>.
+const _ = require('lodash');
 const http = require('http');
 const https = require('https');
 
 function listen(app, ssl_opts=null) {
-  let port = '4200';
+  let port = _.get(process.env, "PORT_API", 4200);
   
   app.set('port', port);
   

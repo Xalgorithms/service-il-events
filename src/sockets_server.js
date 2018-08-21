@@ -44,7 +44,9 @@ function send_on_ws(ws, o) {
 }
 
 function Server(events) {
-  let wss = new WebSocket.Server({ port: 8888 });
+  let port = _.get(process.env, "PORT_EVENTS", 4201);
+  console.log(`# starting sockets server (port=${port})`);
+  let wss = new WebSocket.Server({ port });
   let sockets = {
     anticipated: {},
     live: {}

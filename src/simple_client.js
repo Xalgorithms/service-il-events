@@ -24,18 +24,21 @@
 const axios = require('axios');
 const WebSocket = require('ws');
 
+let args = process.argv.slice(2);
+console.log(args);
 let cl = axios.create({
-  baseURL: 'http://localhost:4200/'
+  baseURL: args[0]
 });
-let topics = process.argv.slice(2);
+let ws_url = args[1];
+let topics = args.slice(2);
 
 console.log(`> creating a subscription (topics=${topics})`);
 cl.post('/subscriptions', { topics: topics }).then((res) => {
   if (200 == res.status) {
     console.log(`< got a subscription (id=${res.data.id}; url=${res.data.url})`);
-    let ws_url = `ws://localhost:8888${res.data.url}`;
+    let url = `${ws_url}${res.data.url}`;
     console.log(`> connecting a websocket`);
-    let ws = new WebSocket(ws_url);
+    let ws = new WebSocket(url);
     ws.on('open', () => {
       console.log('< opened connection');
       ws.send(JSON.stringify({ name: 'confirm', payload: {} }));

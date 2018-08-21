@@ -23,7 +23,6 @@
 // <http://www.gnu.org/licenses/>.
 const _ = require('lodash');
 const kafka = require('kafka-node');
-const HighLevelConsumer = kafka.HighLevelConsumer;
 
 const url = _.get(process.env, 'KAFKA_BROKER', 'localhost:9092');
 

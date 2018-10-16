@@ -28,7 +28,8 @@ const SocketsServer = require('./sockets_server');
 const Consumer = require('./consumer');
 
 const valid_topics = {
-  audit : 'il.emit.audit'
+  audit : 'il.emit.audit',
+  verification: 'il.emit.verification'
 };
 
 let subscribers = {
